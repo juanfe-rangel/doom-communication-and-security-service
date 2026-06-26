@@ -1,5 +1,3 @@
-# doom-communication-and-security-service
-microservice that facilitates interaction between users and provides active security mechanisms during trips.
 
 #  Doom Communication & Security Service
 
@@ -167,9 +165,37 @@ npm run start:prod
 ---
 
 
+# 📨 Diagramas
+
+
+## Diagrama De contexto
+
+![contexto](docs/UML/Diagramas-Contexto.drawio.png)
+
+## Diagrama De Contenedores
+
+![contenedor](docs/UML/Diagramas-Contenedor.drawio%20(1).png)
+
+
+## Diagrama De Componentes
+
+![Componentes](docs/UML/Diagramas-Componentes.drawio.png)
+
+
+## Diagrama de Clases
+
+![Clases](docs/UML/Diagramas-Clases.drawio.png)
+
+
+## Diagrama Entidad-Relación
+
+![Entidad-Relacion](docs/UML/Diagramas-DB.drawio.png)
+
+
+
+
 ---
 
-# Mas imagenes
 
 # 👤👤 Equipo de Desarrollo
 - [@Santiago Suarez](https://github.com/SantiagoSu15)
