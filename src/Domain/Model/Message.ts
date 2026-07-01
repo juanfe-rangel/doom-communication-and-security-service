@@ -1,6 +1,9 @@
 export class Message{
-    private messageId : string;
-    private senderid : string;
-    private contend: string;
-    private timestamp : Date;    
+    constructor(
+        public messageId : string,
+        public senderid : number,
+        public content: string,
+        public timestamp : Date, 
+    ){}
+       
 }

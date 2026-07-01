@@ -1,3 +1,3 @@
 export interface SendMessageUseCase{
-    sendMessage():void;
+    sendMessage(message : string,senderId:number):void;
 }

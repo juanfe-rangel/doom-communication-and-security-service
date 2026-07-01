@@ -1,3 +1,5 @@
+import { Message } from "src/Domain/Model/Message";
+
 export interface GetMessageHistoryUseCase{
-    GetMessageHistory():void;
+    GetMessageHistory(travelId:string): Promise<Message[]>;
 }
