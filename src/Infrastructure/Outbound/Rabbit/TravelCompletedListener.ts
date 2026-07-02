@@ -31,19 +31,14 @@ export class TravelCompletedListener implements OnApplicationBootstrap {
   }
 
   async onApplicationBootstrap() {
-    try{
-
+    try {
       this.channel = await this.rabbit.getChannel();
 
       await this.initializeConfiguration();
       await this.travelCompletedEvent();
-    }catch (error) {
-      console.error(
-        'Error conrabbit',
-        error.message
-      );
+    } catch (error) {
+      console.error('Error conrabbit', error.message);
     }
-    
   }
 
   private async travelCompletedEvent() {

@@ -5,7 +5,6 @@ import { ReportRepository } from 'src/Domain/Repository/ReportRepository';
 import { PrismaService } from 'src/Infrastructure/Config/PrismaService';
 import { ReportStatus } from 'src/Domain/Model/Enum/ReportStatus';
 
-
 @Injectable()
 export class PrismaReportRepository implements ReportRepository {
   constructor(private readonly prisma: PrismaService) {}

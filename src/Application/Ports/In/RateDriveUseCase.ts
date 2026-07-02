@@ -1,3 +1,3 @@
-export interface RateDriverUseCase{
-    RateDriver():void;
+export interface RateDriverUseCase {
+  RateDriver(): void;
 }

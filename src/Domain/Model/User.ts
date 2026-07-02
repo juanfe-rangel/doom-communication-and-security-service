@@ -1,11 +1,8 @@
-import { UserRole } from "../Model/Enum/UserRole";
+import { UserRole } from '../Model/Enum/UserRole';
 
-
-export class User{
-
-    constructor(
-        public userId : number,
-        public userRole : UserRole
-    ){}
-    
+export class User {
+  constructor(
+    public userId: number,
+    public userRole: UserRole,
+  ) {}
 }

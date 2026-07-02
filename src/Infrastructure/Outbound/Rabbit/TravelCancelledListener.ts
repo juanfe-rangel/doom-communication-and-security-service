@@ -31,18 +31,14 @@ export class TravelCancelledListener implements OnApplicationBootstrap {
   }
 
   async onApplicationBootstrap() {
-    try{
+    try {
       this.channel = await this.rabbit.getChannel();
 
       await this.initializeConfiguration();
       await this.travelCancelledEvent();
-    }catch (error) {
-      console.error(
-        'Error conrabbit',
-        error.message
-      );
+    } catch (error) {
+      console.error('Error conrabbit', error.message);
     }
-    
   }
 
   private async travelCancelledEvent() {

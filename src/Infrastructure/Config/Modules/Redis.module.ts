@@ -3,11 +3,7 @@ import { RedisConfig } from '../Redis/Redis.Config';
 
 @Global()
 @Module({
-  providers: [
-    RedisConfig
-  ],
-  exports: [
-    RedisConfig
-  ]
+  providers: [RedisConfig],
+  exports: [RedisConfig],
 })
 export class RedisModule {}

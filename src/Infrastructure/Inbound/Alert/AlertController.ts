@@ -21,10 +21,7 @@ export class AlertController {
   }
 
   @Put('panic-button/:id')
-  activePanicButton(
-    @Param('id') userId: number,
-    @Body('alertButtonDTO') dto: AlertButtonDTO,
-  ) {
+  activePanicButton(@Param('id') userId: number, @Body() dto: AlertButtonDTO) {
     return this.usePanicButtonUseCase.UsePanicButton(userId, dto);
   }
 }

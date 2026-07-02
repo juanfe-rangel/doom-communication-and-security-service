@@ -1,6 +1,5 @@
-import { Message } from "src/Domain/Model/Message";
+import { Message } from 'src/Domain/Model/Message';
 
-export interface ChatWs{
-    sendMessage(message:Message,room:string) :void;
-    
+export interface ChatWs {
+  sendMessage(message: Message, room: string): void;
 }

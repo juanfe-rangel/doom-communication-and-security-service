@@ -1,7 +1,7 @@
-import { Injectable } from "@nestjs/common";
-import { Alert } from "src/Domain/Model/Alert";
-import { AlertRepository } from "src/Domain/Repository/AlertRepository";
-import { RedisConfig } from "src/Infrastructure/Config/Redis/Redis.Config";
+import { Injectable } from '@nestjs/common';
+import { Alert } from 'src/Domain/Model/Alert';
+import { AlertRepository } from 'src/Domain/Repository/AlertRepository';
+import { RedisConfig } from 'src/Infrastructure/Config/Redis/Redis.Config';
 
 @Injectable()
 export class AlertRedisCache implements AlertRepository {
@@ -27,8 +27,7 @@ export class AlertRedisCache implements AlertRepository {
     try {
       const existing = await this.findById(alert.alertId);
       await this.removeIndexes(existing);
-    } catch {
-    }
+    } catch {}
 
     return this.persist(alert);
   }
@@ -37,12 +36,10 @@ export class AlertRedisCache implements AlertRepository {
     try {
       const alert = await this.findById(id);
       await this.removeIndexes(alert);
-    } catch {
-    }
+    } catch {}
 
     await this.redis.del(this.alertKey(id));
   }
-
 
   private alertKey(alertId: string): string {
     return `alert:${alertId}`;
@@ -52,18 +49,11 @@ export class AlertRedisCache implements AlertRepository {
     return `alert:travel:${travelId}`;
   }
 
-
   private async persist(alert: Alert): Promise<Alert> {
-    await this.redis.set(
-      this.alertKey(alert.alertId),
-      JSON.stringify(alert),
-    );
+    await this.redis.set(this.alertKey(alert.alertId), JSON.stringify(alert));
 
     if (alert.travelid) {
-      await this.redis.set(
-        this.travelKey(alert.travelid),
-        alert.alertId,
-      );
+      await this.redis.set(this.travelKey(alert.travelid), alert.alertId);
     }
 
     return alert;
@@ -71,14 +61,15 @@ export class AlertRedisCache implements AlertRepository {
 
   private async removeIndexes(alert: Alert): Promise<void> {
     if (alert.travelid) {
-      const currentAlertId = await this.redis.get(this.travelKey(alert.travelid));
+      const currentAlertId = await this.redis.get(
+        this.travelKey(alert.travelid),
+      );
       if (currentAlertId === alert.alertId) {
         await this.redis.del(this.travelKey(alert.travelid));
       }
     }
   }
 }
-
 
 export class AlertMapper {
   static toDomain(data: any): Alert {
@@ -88,7 +79,7 @@ export class AlertMapper {
       data.alertType,
       data.alertStatus,
       new Date(data.CreatedAt),
-      data.location, 
+      data.location,
     );
   }
 }

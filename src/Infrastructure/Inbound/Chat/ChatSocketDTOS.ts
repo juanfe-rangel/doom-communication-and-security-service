@@ -1,5 +1,6 @@
 export class SendMessageDto {
-    constructor(
+  constructor(
     public content: string,
-    public senderid : number){}
+    public senderid: number,
+  ) {}
 }

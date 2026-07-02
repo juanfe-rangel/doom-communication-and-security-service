@@ -1,6 +1,6 @@
-import { Location } from "src/Domain/Model/Location";
+import { Location } from 'src/Domain/Model/Location';
 
-export type TravelCreatedEvent ={
+export type TravelCreatedEvent = {
   travelId: string;
   organizerId: number;
   driverId: number;
@@ -8,4 +8,4 @@ export type TravelCreatedEvent ={
   conditions?: string;
   origin: Location;
   destination: Location;
-}
+};

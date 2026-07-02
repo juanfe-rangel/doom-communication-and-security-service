@@ -1,14 +1,21 @@
-import { Body, Controller, Get, Inject, Param, Patch, Post } from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger";
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { ReportUserDTO, UpdateReportStatusDto } from './ReportDTOS';
-import { REPORT_PORTS } from "src/Application/Ports/Out/ReportTokens";
-import type { ReportUserUseCase } from "src/Application/Ports/In/Report/ReportUserUseCase";
-import type { GetReportsUseCase } from "src/Application/Ports/In/Report/GetReportsUseCase";
-import type { GetReportByIdUseCase } from "src/Application/Ports/In/Report/GetReportByIdUseCase";
-import type { ManageReportUseCase } from "src/Application/Ports/In/Report/ManageReportUseCase";
-import type{ GetUserReportUseCase } from "src/Application/Ports/In/Report/GetUserReportUseCase";
-import { ReportStatus } from "src/Domain/Model/Enum/ReportStatus";
-
+import { REPORT_PORTS } from 'src/Application/Ports/Out/ReportTokens';
+import type { ReportUserUseCase } from 'src/Application/Ports/In/Report/ReportUserUseCase';
+import type { GetReportsUseCase } from 'src/Application/Ports/In/Report/GetReportsUseCase';
+import type { GetReportByIdUseCase } from 'src/Application/Ports/In/Report/GetReportByIdUseCase';
+import type { ManageReportUseCase } from 'src/Application/Ports/In/Report/ManageReportUseCase';
+import type { GetUserReportUseCase } from 'src/Application/Ports/In/Report/GetUserReportUseCase';
+import { ReportStatus } from 'src/Domain/Model/Enum/ReportStatus';
 
 @ApiTags('Report')
 @Controller('reports')

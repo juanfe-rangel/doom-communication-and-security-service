@@ -6,14 +6,12 @@ import { RedisConfig } from 'src/Infrastructure/Config/Redis/Redis.Config';
 import { Message } from 'src/Domain/Model/Message';
 import { User } from 'src/Domain/Model/User';
 
-
-
 @Injectable()
 export class ChatRedisCache implements ChatRepository {
   constructor(private readonly redis: RedisConfig) {}
 
   async save(chat: Chat): Promise<Chat> {
-    console.log(chat)
+    console.log(chat);
     return this.persist(chat);
   }
 
@@ -64,10 +62,7 @@ export class ChatRedisCache implements ChatRepository {
 
     await this.removeIndexes(chat);
 
-    chat.participants = this.buildParticipants(
-      chat.driverId,
-      passengersIds,
-    );
+    chat.participants = this.buildParticipants(chat.driverId, passengersIds);
 
     await this.persist(chat);
   }
@@ -89,8 +84,7 @@ export class ChatRedisCache implements ChatRepository {
     try {
       const chat = await this.findById(id);
       await this.removeIndexes(chat);
-    } catch {
-    }
+    } catch {}
 
     await this.redis.del(this.chatKey(id));
   }
@@ -122,10 +116,7 @@ export class ChatRedisCache implements ChatRepository {
     return `chat:participant:${participantId}`;
   }
 
-  private buildParticipants(
-    driverId: number | null,
-    passengersIds: number[],
-  ) {
+  private buildParticipants(driverId: number | null, passengersIds: number[]) {
     const participants = passengersIds.map((userId) => ({
       userId,
       userRole: UserRole.PASSENGER,
@@ -142,15 +133,9 @@ export class ChatRedisCache implements ChatRepository {
   }
 
   private async persist(chat: Chat): Promise<Chat> {
-    await this.redis.set(
-      this.chatKey(chat.chatId),
-      JSON.stringify(chat),
-    );
+    await this.redis.set(this.chatKey(chat.chatId), JSON.stringify(chat));
 
-    await this.redis.set(
-      this.travelKey(chat.travelId),
-      chat.chatId,
-    );
+    await this.redis.set(this.travelKey(chat.travelId), chat.chatId);
 
     for (const participant of chat.participants) {
       await this.redis.set(
@@ -163,9 +148,7 @@ export class ChatRedisCache implements ChatRepository {
   }
 
   private async removeIndexes(chat: Chat): Promise<void> {
-    await this.redis.del(
-      this.travelKey(chat.travelId),
-    );
+    await this.redis.del(this.travelKey(chat.travelId));
 
     for (const participant of chat.participants) {
       const currentChatId = await this.redis.get(
@@ -173,37 +156,30 @@ export class ChatRedisCache implements ChatRepository {
       );
 
       if (currentChatId === chat.chatId) {
-        await this.redis.del(
-          this.participantKey(participant.userId),
-        );
+        await this.redis.del(this.participantKey(participant.userId));
       }
     }
   }
 }
 
-
-
 export class ChatMapper {
-
   static toDomain(data: any): Chat {
-      return new Chat(
-          data.chatId,
-          data.travelId,
-          data.driverId,
-          data.participants.map(
-              (p: any) => new User(p.userId, p.userRole),
+    return new Chat(
+      data.chatId,
+      data.travelId,
+      data.driverId,
+      data.participants.map((p: any) => new User(p.userId, p.userRole)),
+      data.active,
+      new Date(data.createdAt),
+      data.messages.map(
+        (m: any) =>
+          new Message(
+            m.messageId,
+            m.senderid,
+            m.content,
+            new Date(m.timestamp),
           ),
-          data.active,
-          new Date(data.createdAt),
-          data.messages.map(
-              (m: any) =>
-                  new Message(
-                      m.messageId,
-                      m.senderid,
-                      m.content,
-                      new Date(m.timestamp),
-                  ),
-          ),
-      );
+      ),
+    );
   }
 }
