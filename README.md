@@ -1,106 +1,111 @@
 
-#  Doom Communication & Security Service
+# Rideci Security & Communication Service
 
-Microservicio REST para la gestión de viajes compartidos, parte de la plataforma **RIDECI LEGACY**.
+Servicio REST y WebSocket de la plataforma **RIDECI LEGACY** para gestionar reportes, alertas, chat en tiempo real y eventos de comunicación entre microservicios.
 
-Construido con **NestJS**, **MongoDB** (a través de Prisma ORM) y **RabbitMQ** para la comunicación asíncrona entre microservicios.
-
----
-
-# 🛠️ Tecnologías Principales
-
-| Tecnología                  | Uso                                 |
-| --------------------------- | ----------------------------------- |
-| 🚀 NestJS 11                | Framework principal                 |
-| 🍃 Postgre + Prisma 6       | Base de datos y ORM                 |
-| 🍃 Redis + Prisma 6       | Base de datos y ORM                 |
-| 📨 RabbitMQ (amqplib)       | Mensajería basada en eventos        |
-| 📖 Swagger / OpenAPI        | Documentación interactiva de la API |
+Está construido con **NestJS**, **Prisma** sobre **PostgreSQL**, **Redis** para soporte de datos temporales y **RabbitMQ** para mensajería asíncrona. La documentación interactiva se expone con **Swagger**.
 
 ---
 
-# 🏗️ Arquitectura
+## Tecnologías principales
 
-El servicio implementa **Arquitectura Hexagonal (Ports & Adapters)** para mantener desacoplada la lógica de negocio de los detalles de infraestructura.
+| Tecnología | Uso |
+| --- | --- |
+| NestJS 11 | Framework principal |
+| Prisma 7 + PostgreSQL | Persistencia principal |
+| Redis | Caché y soporte de datos temporales |
+| RabbitMQ | Publicación y consumo de eventos |
+| Socket.IO | Chat en tiempo real |
+| Swagger / OpenAPI | Documentación de la API |
+
+---
+
+## Arquitectura
+
+El proyecto sigue una **Arquitectura Hexagonal (Ports & Adapters)**. La lógica de negocio vive en la capa de aplicación y dominio, mientras que la infraestructura se encarga de HTTP, WebSocket, Redis, Prisma y RabbitMQ.
 
 ```text
 src/
-├── travels/
-│   ├── domain/              # 🧠 Entidades y enums del negocio
-│   ├── application/
-│   │   ├── service/         # ⚙️ Casos de uso y lógica de negocio
-│   │   ├── ports      
-│   │       ├── out/         # 🔌 Interfaces (repositorios y publicadores)
-│   │       └── in/          # 🔌 Interfaces (Casos de uso )
-│   │   └── events/          # 📡 Eventos de dominio
-│   └── infrastructure/
-│       ├── controller/      # 🌐 Controladores HTTP + DTOs
-│       ├── persistence/     # 💾 Adaptador Prisma/Postre/redis
-│       └── rabbit/          # 🐇 Adaptador RabbitMQ
-└── 
+├── Domain/
+│   ├── Model/          # Entidades, enums y objetos de dominio
+│   └── Repository/     # Contratos de persistencia
+├── Application/
+│   ├── Ports/         # Puertos de entrada y salida
+│   └── Service/       # Casos de uso
+└── Infrastructure/
+	├── Config/        # Prisma, Redis, RabbitMQ y módulos Nest
+	├── Inbound/       # Controladores HTTP y WebSocket
+	└── Outbound/      # Adaptadores de persistencia y mensajería
 ```
 
 ---
 
-# ⚙️ Variables de Entorno
+## Funcionalidades
 
-Crea un archivo `.env` en la raíz del proyecto usando `.env.example` como referencia:
+- Gestión de reportes de usuarios.
+- Cambio de estado de reportes.
+- Historial y envío de mensajes en chat.
+- Activación del botón de pánico.
+- Gestión de alertas.
+- Integración con eventos por RabbitMQ.
+- Exposición de endpoints REST y eventos WebSocket.
+
+---
+
+## Variables de entorno
+
+Crea un archivo `.env` en la raíz del proyecto y define, como mínimo, estas variables:
 
 ```env
-DATABASE_URL=mongodb+srv://<usuario>:<password>@<cluster>.mongodb.net/<database>
+DATABASE_URL=postgresql://<usuario>:<password>@<host>:5432/<database>
 RABBITMQ_URL=amqp://localhost
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=
 PORT=3000
 ```
 
+`RABBITMQ_URL` tiene valor por defecto `amqp://localhost` si no se define.
 
 ---
 
-# 🚀 Instalación y Ejecución
+## Requisitos previos
 
-## 📋 Prerequisitos
-
-* Node.js 18 o superior
-* npm
-* Postgre (local o Atlas)
-* RabbitMQ (opcional)
+- Node.js 18 o superior.
+- npm.
+- PostgreSQL.
+- Redis.
+- RabbitMQ.
 
 ---
 
-## 1️⃣ Clonar el repositorio
+## Instalación y ejecución
+
+1. Clona el repositorio.
 
 ```bash
 git clone <url-del-repositorio>
 ```
 
-## 2️⃣ Instalar dependencias
+2. Instala dependencias.
 
 ```bash
 npm install
 ```
 
-## 3️⃣ Configurar variables de entorno
-
-```bash
-cp .env.example .env
-```
-
-Editar el archivo `.env` con las credenciales correspondientes.
-
-## 4️⃣ Generar cliente Prisma
+3. Genera el cliente de Prisma.
 
 ```bash
 npm exec prisma generate
 ```
 
-## 5️⃣ Ejecutar el servicio
-
-### 🔥 Desarrollo
+4. Ejecuta el servicio en desarrollo.
 
 ```bash
 npm run start:dev
 ```
 
-### 📦 Producción
+5. Para producción, compila y arranca el build.
 
 ```bash
 npm run build
@@ -109,94 +114,110 @@ npm run start:prod
 
 ---
 
-## ✅ Verificar funcionamiento
+## Scripts disponibles
 
-| Recurso                | URL                           |
-| ---------------------- | ----------------------------- |
-| 🌐 API                 | http://localhost:3000         |
-| 📖 Swagger UI          | http://localhost:3000/docs    |
-
----
-
-# 🛣️ Endpoints
-
-                         
+- `npm run start` inicia la app.
+- `npm run start:dev` inicia en modo desarrollo con recarga.
+- `npm run build` compila TypeScript.
+- `npm run lint` ejecuta ESLint.
+- `npm run test` ejecuta pruebas unitarias.
+- `npm run test:cov` ejecuta pruebas con cobertura.
+- `npm run test:e2e` ejecuta pruebas end-to-end.
 
 ---
 
-# 📦 Modelo Principal
+## Accesos
 
-## 
-
-```json
-
-```
-
----
-
-# 📑 Enumeraciones
-
-| Campo          | Valores Permitidos                                    |
-| -------------- | ----------------------------------------------------- |
-| 🚦 Status      | `CREATED` · `IN_PROGRESS` · `COMPLETED` · `CANCELLED` |
-| 🗓️ TravelType | `DAILY` · `OCCASIONAL`                                |
-| 🚘 VehicleType | `CAR` · `MOTORCYCLE` · `BUS` · `BICYCLE`              |
+| Recurso | URL |
+| --- | --- |
+| API | http://localhost:3000 |
+| Swagger | http://localhost:3000/docs |
 
 ---
 
-# 📨 Eventos Publicados en RabbitMQ
+## Endpoints REST
 
-**Exchange:** `travel.exchange` *(tipo: topic)*
+### Reportes
 
-| Evento                 | Routing Key                 | Descripción           |
-| ---------------------- | --------------------------- | --------------------- |
-| 🎉 TravelCreatedEvent  | `travel.created`            | Se crea un viaje      |
-| ✏️ TravelUpdatedEvent  | `travel.updated`            | Se actualiza un viaje |
-| ✅ TravelCompletedEvent | `travel.completed`          | El viaje finaliza     |
-| ❌ TravelCancelledEvent | `travel.cancelled`          | El viaje es cancelado |
-| 👥 TravelUpdatedEvent  | `travel.passengers.updated` | Cambian los pasajeros |
+| Método | Ruta | Descripción |
+| --- | --- | --- |
+| GET | `/reports` | Obtiene todos los reportes |
+| GET | `/reports/:id` | Obtiene un reporte por id |
+| GET | `/reports/user/:userId` | Obtiene los reportes de un usuario |
+| PATCH | `/reports/:id` | Cambia el estado de un reporte |
+| POST | `/reports/create` | Crea un nuevo reporte |
+
+### Alertas
+
+| Método | Ruta | Descripción |
+| --- | --- | --- |
+| PATCH | `/alerts/manage/:id` | Acepta o rechaza una alerta |
+| PUT | `/alerts/panic-button/:id` | Activa el botón de pánico |
+
+### Chat
+
+| Método | Ruta | Descripción |
+| --- | --- | --- |
+| GET | `/chat/messages?travelId=...` | Obtiene el historial de mensajes |
+| POST | `/chat/test/:test` | Endpoint auxiliar de prueba para crear un chat |
 
 ---
 
-# 📖 Documentación Swagger
+## Eventos WebSocket
 
+- `chat:EnterRoom`: une al cliente a una sala.
+- `chat:sendMessage`: envía un mensaje al chat.
 
 ---
 
+## Evidencia de pruebas unitarias
 
-# 📨 Diagramas
+Agrega aquí la captura de la ejecución de pruebas unitarias o de cobertura.
+
+![Captura de pruebas unitarias](docs/img/img.png)
+![Captura de pruebas unitarias](docs/img/img_1.png)
 
 
-## Diagrama De contexto
+> Reemplaza esta imagen por la evidencia real de `npm run test` o `npm run test:cov`.
+
+---
+
+## Patrones de diseño usados
+
+- **Arquitectura Hexagonal**: separa dominio, aplicación e infraestructura para reducir el acoplamiento.
+- **Repository Pattern**: abstrae el acceso a datos mediante contratos en `Domain/Repository`.
+- **Dependency Injection**: NestJS inyecta casos de uso, repositorios y adaptadores.
+- **Adapter Pattern**: Prisma, Redis, RabbitMQ y WebSocket se implementan como adaptadores externos.
+- **Use Case / Application Service**: cada operación del negocio vive en un servicio de aplicación específico.
+
+---
+
+## Diagramas
+
+### Diagrama de contexto
 
 ![contexto](docs/UML/Diagramas-Contexto.drawio.png)
 
-## Diagrama De Contenedores
+### Diagrama de contenedores
 
 ![contenedor](docs/UML/Diagramas-Contenedor.drawio.png)
 
+### Diagrama de componentes
 
-## Diagrama De Componentes
+![componentes](docs/UML/Diagramas-Componentes.drawio.png)
 
-![Componentes](docs/UML/Diagramas-Componentes.drawio.png)
+### Diagrama de clases
 
+![clases](docs/UML/Diagramas-Clases.drawio.png)
 
-## Diagrama de Clases
+### Diagrama entidad-relación
 
-![Clases](docs/UML/Diagramas-Clases.drawio.png)
-
-
-## Diagrama Entidad-Relación
-
-![Entidad-Relacion](docs/UML/Diagramas-DB.drawio.png)
-
-
-
+![er](docs/UML/Diagramas-DB.drawio.png)
 
 ---
 
+## Equipo de desarrollo
 
-# 👤👤 Equipo de Desarrollo
 - [@Santiago Suarez](https://github.com/SantiagoSu15)
 - [@Felipe Rangel](https://github.com/juanfe-rangel)
 
