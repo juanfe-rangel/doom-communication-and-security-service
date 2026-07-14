@@ -9,7 +9,7 @@ export class PrismaService
 {
   constructor() {
     const adapter = new PrismaPg({
-      connectionString: process.env.DATABASE_URL as string,
+      connectionString: "postgresql://usuariopostgre:Contra123@postgrerideci.postgres.database.azure.com:5432/postgres?schema=public&sslmode=require" as string,
     });
     super({ adapter });
   }
