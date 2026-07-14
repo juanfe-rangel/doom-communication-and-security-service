@@ -24,6 +24,8 @@ jobs:
           node-version: '24.x'
 
       - name: npm install, generate prisma, build, and test
+        env:
+            DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
           npm install
           npx prisma generate
