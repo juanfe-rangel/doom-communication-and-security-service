@@ -1,4 +1,4 @@
-
+ 
 # Rideci Security & Communication Service
 
 Servicio REST y WebSocket de la plataforma **RIDECI LEGACY** para gestionar reportes, alertas, chat en tiempo real y eventos de comunicación entre microservicios.
