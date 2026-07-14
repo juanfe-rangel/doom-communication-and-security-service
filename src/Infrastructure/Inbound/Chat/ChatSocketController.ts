@@ -8,7 +8,7 @@ import {
 } from '@nestjs/websockets';
 import type { SendMessageUseCase } from 'src/Application/Ports/In/Chat/SendMessageUseCase';
 import { CHAT_PORTS } from 'src/Application/Ports/Out/ChatTokens';
-import { Socket, Server } from 'Socket.io';
+import { Socket, Server } from 'socket.io';
 import { ChatWebSocket } from '../../Outbound/WebSocket/ChatWebSocket';
 import { SendMessageDto } from './ChatSocketDTOS';
 
