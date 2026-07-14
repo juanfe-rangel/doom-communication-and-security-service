@@ -28,6 +28,6 @@ export class sendMessageImpl implements SendMessageUseCase {
 
     await this.chatRepository.update(chat);
 
-    this.chatWs.sendMessage(message, chat.chatId);
+    this.chatWs.sendMessage(message, chat.travelId);
   }
 }
