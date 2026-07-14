@@ -13,7 +13,7 @@ import { ChatWebSocket } from '../../Outbound/WebSocket/ChatWebSocket';
 import { SendMessageDto } from './ChatSocketDTOS';
 
 @WebSocketGateway()
-export class ChatSocketController {
+export class ChatSocketController implements OnGatewayInit {
   @WebSocketServer() server: Server;
 
   constructor(
